@@ -18,39 +18,25 @@ $(document).ready(function() {
 			attribute: 'SystemLoadAverage'
 		}
 	]);
-	factory.create({
-		name:     'java.lang:type=Threading',
-		attribute: 'ThreadCount'
-	});
 	factory.create([
-		{
-			name: 'Catalina:name="http-bio-8080",type=ThreadPool',
-			attribute: 'currentThreadsBusy'
+	        {
+		        name:     'java.lang:type=Threading',
+		        attribute: 'ThreadCount'
 		},
-		{
-			name: 'Catalina:name=executor,type=Executor',
-			attribute: 'queueSize'
-		}
-	]);
-	factory.create([
-		{
-			name: 'com.blogspot.nurkiewicz.download.tokenbucket:name=perRequestTokenBucket,type=PerRequestTokenBucket',
-			attribute: 'OngoingRequests'
-		},
-		{
-			name: 'com.blogspot.nurkiewicz.download:name=downloadServletHandler,type=DownloadServletHandler',
-			attribute: 'AwaitingChunks'
+	        {
+		        name:     'java.lang:type=Threading',
+		        attribute: 'DaemonThreadCount'
 		}
 	]);
 });
 
 function JmxChartsFactory(keepHistorySec, pollInterval, columnsCount) {
-	var jolokia = new Jolokia("/jolokia");
+	var jolokia = new Jolokia(OSVHost + "/jolokia");
 	var series = [];
 	var monitoredMbeans = [];
 	var chartsCount = 0;
 
-	columnsCount = columnsCount || 3;
+	columnsCount = columnsCount || 2;
 	pollInterval = pollInterval || 1000;
 	var keepPoints = (keepHistorySec || 600) / (pollInterval / 1000);
 
